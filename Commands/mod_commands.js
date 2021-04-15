@@ -1,13 +1,26 @@
 const {cmd, pcmd} = require('../Utils/cmd')
+const {parseArgs} = require('../Modules/argumentParser')
 
 
 pcmd(['manageMessages'], 'purge', async (ctx, ...args) => {
-    console.log(args[0])
-    let messages = await ctx.message.channel.getMessages(Number(args[0]) + 1)
-    console.log(messages.length)
+    let pArgs = await parseArgs(ctx, ...args)
+    let messages
+
+    if (pArgs.ids.length > 0) {
+        messages = await ctx.message.channel.getMessages(100)
+    } else {
+        messages = await ctx.message.channel.getMessages(Number(pArgs.extra[0]) + 1)
+    }
     const msgList = []
+    let deleteIDLimit = Number(pArgs.extra[0]) + (pArgs.ids[0] === ctx.message.author.id? 1: 0)
     messages.map(x => {
-        msgList.push(x.id)
+        if (pArgs.ids.length > 0) {
+            if (x.author.id === pArgs.ids[0] && msgList.length < deleteIDLimit){
+                msgList.push(x.id)
+            }
+        } else {
+            msgList.push(x.id)
+        }
     })
     await ctx.message.channel.deleteMessages(msgList, 'purge')
 })
