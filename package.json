@@ -1,0 +1,21 @@
+{
+  "name": "geo-bot-node",
+  "version": "0.0.1",
+  "description": "Discord management bot built to personal specifications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "Mj11jM",
+  "license": "ISC",
+  "dependencies": {
+    "discord-paginator": "^0.8.13",
+    "eris": "github:abalabahaha/eris#dev",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.3"
+  }
+}
