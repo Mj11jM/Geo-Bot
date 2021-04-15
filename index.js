@@ -85,7 +85,6 @@ bot.on('ready', async () => {
 
 bot.on('messageCreate', async (message) => {
 
-
     let curGuild = await fetchOrCreateGuild(message)
     if (!curGuild) {
         curGuild = {
