@@ -3,18 +3,37 @@ const parseArgs = async (ctx, ...args) => {
         return false
     }
 
+    let starts = ['add', 'enable', 'start', 'true']
+    let stops = ['stop', 'disable', 'false', 'remove']
+    let events = [
+        'channel_create', 'channel_delete', 'channel_update', 'channel_pin_update',
+        'discriminator_change', 'username_change', 'avatar_change', 'guild_update',
+        'invites', 'role_create', 'role_delete', 'role_update', 'member_join',
+        'member_update', 'member_leave', 'presence_update', 'join_channel',
+        'switch_channel', 'leave_channel', 'voice_state']
+    let eventGroups = ['channel', 'guild', 'member', 'user', 'role', 'voice', 'channel_events',
+        'guild_events', 'member_events', 'user_events', 'role_events', 'voice_events']
+
     const newArgs = {
         ids: [],
-        options: {
-            start: false,
-            stop: false
-        },
+        start: false,
+        stop: false,
         events: [],
         extra: []
     }
 
     args.map(x => {
         switch (x) {
+            case starts.includes(x):
+                newArgs.start = true
+                break
+            case stops.includes(x):
+                newArgs.stop = true
+                break
+            case events.includes(x):
+            case eventGroups.includes(x):
+                newArgs.events.push(x)
+                break
             default:
                 let ID = tryGetUserID(x)
                 if (ID){

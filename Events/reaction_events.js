@@ -1,4 +1,4 @@
-const reaction_add = async (ctx, message, reaction, id) => {
+const reaction_add = async (ctx, message, reaction, member) => {
     ctx.pgn.trigger(id, message, reaction.name)
 }
 

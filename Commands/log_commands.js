@@ -1,12 +1,16 @@
 const {pcmd} = require('../Utils/cmd')
 const {Logs} = require('../Tables')
 const colors = require('../Utils/colors')
+const {parseArgs} = require('../Modules/argumentParser')
 const _ = require('lodash')
 
-pcmd(["administrator"], ['log', 'enable'], ['log', 'start'], ['log', 'set'], ['log', 'server'], async (ctx, ...args) => {
+pcmd(["administrator"], 'log', async (ctx, ...args) => {
+    let pArgs = parseArgs(ctx, ...args)
+})
+
+pcmd(["administrator"], ['log', 'all'], ['log', 'everything'], async (ctx, ...args) => {
     let log = await Logs.findOne({guild_id: ctx.message.guildID, channel_id: ctx.message.channel.id})
     if (!log && args.length === 0) {
-        console.log('test')
         log = new Logs()
         log.guild_id = ctx.message.guildID
         log.channel_id = ctx.message.channel.id
@@ -23,7 +27,7 @@ pcmd(["administrator"], ['log', 'enable'], ['log', 'start'], ['log', 'set'], ['l
 pcmd(["administrator"], ['log', 'info'], ['log', 'status'], ['log', 'list'], ['log', 'ls'], async (ctx, ...args) => {
     let log = await Logs.find({guild_id: ctx.message.guildID})
     let pages = []
-    if (log) {
+    if (log.length !== 0) {
         log.map(x => {
             let channel = ctx.bot.getChannel(x.channel_id)
             pages.push(
@@ -92,13 +96,27 @@ pcmd(["administrator"], ['log', 'info'], ['log', 'status'], ['log', 'list'], ['l
                 }
             )
         })
+        pages[0].footer.text = `Page 1/${pages.length}`
+        await ctx.pgn.addPagination(ctx.message.author.id, ctx.message.channel.id, {
+            pages,
+            embed: pages[0],
+            switchPage: (data) => data.embed = data.pages[data.pagenum]
+        })
+    } else {
+        await ctx.reply('There are no active log channels in this server!', 'red')
     }
-    pages[0].footer.text = `Page 1/${pages.length}`
-    await ctx.pgn.addPagination(ctx.message.author.id, ctx.message.channel.id, {
-        pages,
-        embed: pages[0],
-        switchPage: (data) => data.embed = data.pages[data.pagenum]
-    })
     // await ctx.send(ctx.message.channel.id, list[0])
+
+})
+
+pcmd(['administrator'], ['log', 'add'], ['log', 'enable'], async (ctx, ...args) => {
+    let pArgs = parseArgs(ctx, ...args)
+    if (pArgs.events.length === 0) {
+        return ctx.reply('At least 1 event is required to use this command. To figure out')
+    }
+})
+
+pcmd(['administrator'], ['log', 'remove'], ['log', 'disable'], async (ctx, ...args) => {
+    let pArgs = parseArgs(ctx, ...args)
 
 })

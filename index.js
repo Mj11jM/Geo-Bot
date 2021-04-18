@@ -84,7 +84,6 @@ bot.on('ready', async () => {
 })
 
 bot.on('messageCreate', async (message) => {
-
     let curGuild = await fetchOrCreateGuild(message)
     if (!curGuild) {
         curGuild = {
@@ -94,7 +93,6 @@ bot.on('messageCreate', async (message) => {
     if(message.author.bot || !message.content.startsWith(curGuild.prefix)) {
         return
     }
-
 
     const reply = (string, color = 'green') => send(message.channel.id, embedBuilder(string, color))
     const curUser = await fetchOrCreateUser(message)
@@ -116,8 +114,12 @@ bot.on('messageCreate', async (message) => {
 })
 
 bot.on('error', (error, id) => {
-    console.log(id)
-    console.log(error)
+    if (error.code == 1006 || error.code == 1001) {
+        console.log('Connection reset')
+    } else {
+        console.log(error)
+    }
+
 })
 /*
 ----------------------------------------------------------------------------
@@ -206,8 +208,8 @@ bot.on('messageUpdate', async (message, oldMessage) => {
                             Reaction Events
 ----------------------------------------------------------------------------
  */
-bot.on('messageReactionAdd', async (message, reaction, id) => {
-    await Reaction.reaction_add(context, message, reaction, id)
+bot.on('messageReactionAdd', async (message, reaction, member) => {
+    await Reaction.reaction_add(context, message, reaction, member)
 })
 bot.on('messageReactionRemove', async (message, reaction) => {
     await Reaction.reaction_remove(context, message, reaction)

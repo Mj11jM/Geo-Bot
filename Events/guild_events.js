@@ -1,5 +1,13 @@
-const guild_create = async (ctx, guild) => {
+const {Guild} = require('../Tables')
 
+const guild_create = async (ctx, guild) => {
+    const priorGuild = Guild.findOne({guild_id: guild.id})
+    if (!priorGuild) {
+        const newGuild = new Guild()
+        guild.guild_id = guild.id
+        guild.guild_name = guild.name
+        await newGuild.save()
+    }
 }
 
 const guild_delete = async (ctx, guild) => {

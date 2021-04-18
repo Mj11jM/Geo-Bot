@@ -4,27 +4,40 @@ const _ = require('lodash')
 pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'], ['rero', 'add'], async (ctx, ...args) => {
     const groups = _.chunk(args, 2)
     let pairs = []
-    let error = false
+    let roleError, emojiError = false
     groups.map(x => {
         let reroPair = {}
-        let role = ctx.message.member.guild.roles.filter(y => y.name.toLowerCase() === x[0])
-        let emoji = x[1]
+        let role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[0]) ||
+            (y.name.toLowerCase() === x[0].replace('_', ' ')))
+        let emoji = x[1].split(':')
         if (role.length === 0) {
-            role = ctx.message.member.guild.roles.filter(y => y.name.toLowerCase() === x[1])
-            emoji = x[0]
+            role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[1]) ||
+                (y.name.toLowerCase() === x[1].replace('_', ' ')))
+            emoji = x[0].split(':')
         }
         if (role.length === 0) {
-            error = true
+            roleError = true
             return ctx.reply(`No roles found using ${x[0]} and ${x[1]}. Please make sure you enter either the role name exactly, or the role ID.`, 'red')
         }
-        reroPair.emoji = emoji
+        if (emoji.length > 1) {
+            emoji[emoji.length - 1] = emoji[emoji.length - 1].replace('>', '')
+            emoji.shift()
+        }
+        reroPair.emoji = emoji.join(':')
         reroPair.role = role[0]
         pairs.push(reroPair)
-
     })
     console.log(pairs)
-    if (!error) {
-        await ctx.send(ctx.message.channel.id, `${groups.join(', ')}`)
+    if (!roleError) {
+        await ctx.send(ctx.message.channel.id, `${groups.join(', ')}`).then(message => {
+            pairs.map( x => {
+                try {
+                    message.addReaction(x.emoji)
+                } catch (e) {
+                    console.log(e)
+                }
 
+            })
+        })
     }
 })
