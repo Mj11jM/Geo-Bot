@@ -9,7 +9,7 @@ const colors = require('./Utils/colors')
 const paginator = require('discord-paginator')
 const {trigger} = require('./Utils/cmd')
 const config = require('./config.json')
-const commands      = require('./commands')
+const commands = require('./Commands')
 const {fetchOrCreateUser} = require("./Modules/users");
 const {fetchOrCreateGuild} = require('./Modules/guilds')
 
