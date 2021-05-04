@@ -36,9 +36,6 @@ const send = (channel, message) => {
     if(message.description)
         message.description = message.description.replace(/\s\s+/gm, '\n')
 
-    if(message.fields)
-        message.fields.map(x => x.value = x.value.replace(/\s\s+/gm, '\n'))
-
     if(!message.color)
         message.color = colors['green']
 
@@ -60,6 +57,10 @@ const direct = async (user, string, color = 'green') => {
     return send(ch.id, embedBuilder(string, color))
 }
 
+const icons = {
+    true: `✅`,
+    false: `❌`
+}
 
 
 const context = {
@@ -67,6 +68,7 @@ const context = {
     bot,
     pgn,
     config,
+    icons,
     send,
     direct,
 
@@ -187,6 +189,9 @@ bot.on('guildMemberRemove', async (guild, member) => {
     await Member.member_remove(context, guild, member)
 })
 bot.on('guildMemberUpdate', async (guild, member, oldMember) => {
+    if (!oldMember || member.bot) {
+        return
+    }
     await Member.member_update(context, guild, member, oldMember)
 })
 /*
@@ -209,10 +214,13 @@ bot.on('messageUpdate', async (message, oldMessage) => {
 ----------------------------------------------------------------------------
  */
 bot.on('messageReactionAdd', async (message, reaction, member) => {
-    await Reaction.reaction_add(context, message, reaction, member)
+    let fetchedMessage = await bot.getMessage(message.channel.id, message.id)
+    await Reaction.reaction_add(context, fetchedMessage, reaction, member)
 })
-bot.on('messageReactionRemove', async (message, reaction) => {
-    await Reaction.reaction_remove(context, message, reaction)
+bot.on('messageReactionRemove', async (message, reaction, memberID) => {
+    let fetchedMessage = await bot.getMessage(message.channel.id, message.id)
+    let member = fetchedMessage.channel.guild.members.get(memberID)
+    await Reaction.reaction_remove(context, fetchedMessage, reaction, member)
 })
 bot.on('messageReactionRemoveEmoji', async (message, emoji) => {
     await Reaction.reaction_remove_emoji(context, message, emoji)

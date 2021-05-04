@@ -1,10 +1,14 @@
 const {pcmd} = require('../Utils/cmd')
+const {Reactions} = require('../Tables')
 const _ = require('lodash')
 
 pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'], ['rero', 'add'], async (ctx, ...args) => {
     const groups = _.chunk(args, 2)
-    let pairs = []
-    let roleError, emojiError = false
+    const pairs = []
+    const rError = []
+    let roleError = false
+    let reroDB = new Reactions()
+    let message = ``
     groups.map(x => {
         let reroPair = {}
         let role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[0]) ||
@@ -17,27 +21,47 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
         }
         if (role.length === 0) {
             roleError = true
-            return ctx.reply(`No roles found using ${x[0]} and ${x[1]}. Please make sure you enter either the role name exactly, or the role ID.`, 'red')
+            rError.push([x[0], x[1]])
         }
+        let message_emoji = emoji.join(':')
         if (emoji.length > 1) {
-            emoji[emoji.length - 1] = emoji[emoji.length - 1].replace('>', '')
+            let last = emoji.pop().replace(/\D/, '')
             emoji.shift()
+            emoji.push(last)
         }
         reroPair.emoji = emoji.join(':')
-        reroPair.role = role[0]
+        reroPair.role = role[0].id
+
+        message += `${message_emoji} ${role[0].mention}\n`
         pairs.push(reroPair)
     })
-    console.log(pairs)
+    reroDB.reaction_roles = pairs
+    reroDB.guild_id = ctx.message.guildID
     if (!roleError) {
-        await ctx.send(ctx.message.channel.id, `${groups.join(', ')}`).then(message => {
-            pairs.map( x => {
-                try {
-                    message.addReaction(x.emoji)
-                } catch (e) {
-                    console.log(e)
-                }
-
+        const embed = {
+            description: message,
+            footer: {
+                text: new Date().toLocaleString('en-gb', {hour12: false})
+            },
+            author: {
+                name: "Reaction Roles!"
+            }
+        }
+        await ctx.send(ctx.message.channel.id, embed).then(async (message) => {
+            reroDB.message_id = message.id
+            await reroDB.save()
+            await pairs.map( async (x) => {
+                await message.addReaction(x.emoji).catch(async (e) => {
+                    await Reactions.findOneAndDelete({guild_id: message.guildID, message_id: message.id})
+                    await message.delete().catch(e => e)
+                    await ctx.reply(`Error applying emoji **${x.emoji}**. It may be in a server the bot is not in, or is currently unavailable.`, 'red')
+                    return false
+                })
             })
         })
+    } else {
+        return ctx.reply(`Cannot find roles in grouping(s) **${rError.join(', ')}**! If your role has a space in it, replace the space with \`_\``, 'red')
     }
+
+
 })

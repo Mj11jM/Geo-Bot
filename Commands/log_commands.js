@@ -1,11 +1,20 @@
 const {pcmd} = require('../Utils/cmd')
 const {Logs} = require('../Tables')
 const colors = require('../Utils/colors')
-const {parseArgs} = require('../Modules/argumentParser')
+const {parseArgs,
+strictLogArgs,
+looseLogArgs} = require('../Modules/argumentParser')
 const _ = require('lodash')
 
 pcmd(["administrator"], 'log', async (ctx, ...args) => {
-    let pArgs = parseArgs(ctx, ...args)
+    let log = await Logs.findOne({guild_id: ctx.message.guildID, channel_id: ctx.message.channel.id})
+    if (!log) {
+        log = new Logs()
+        log.guild_id = ctx.message.guildID
+        log.channel_id = ctx.message.channel.id
+    }
+    const swapped = looseLogArgs(ctx, log, args)
+    await ctx.reply()
 })
 
 pcmd(["administrator"], ['log', 'all'], ['log', 'everything'], async (ctx, ...args) => {
@@ -33,59 +42,59 @@ pcmd(["administrator"], ['log', 'info'], ['log', 'status'], ['log', 'list'], ['l
             pages.push(
                 {
                     title: `Log Info for #${channel.name}`,
-                    description: `GLOBAL EVENTS: ${x.all_events? `**TRUE**\nThis means no matter what is listed below, all events are ***ENABLED***\nRun whatever fucking command I make to disable this!` : 'false'}`,
+                    description: `GLOBAL EVENTS: ${x.all_events? `✅\nThis means no matter what is listed below, all events are ***ENABLED***` : '❌'}`,
                     author: {
                         name: `Channel ID: ${x.channel_id}`
                     },
                     fields: [
                         {
                             name: "Channel Events",
-                            value: `All Events: ${x.channel_events.all? `**true**` : 'false'}
-                            Channel Create: ${x.channel_events.create? `**true**` : 'false'}
-                            Channel Update: ${x.channel_events.update? `**true**` : 'false'}
-                            Channel Delete: ${x.channel_events.delete? `**true**` : 'false'}
-                            Channel Pin Update: ${x.channel_events.pins? `**true**` : 'false'}`,
+                            value: `All Events: ${ctx.icons[x.channel_events.all]}
+                            Channel Create: ${ctx.icons[x.channel_events.create]}
+                            Channel Update: ${ctx.icons[x.channel_events.update]}
+                            Channel Delete: ${ctx.icons[x.channel_events.delete]}
+                            Channel Pin Update: ${ctx.icons[x.channel_events.pins]}`,
                             inline: true
                         },
                         {
                             name: "Guild Events",
-                            value: `All Events: ${x.guild_events.all? `**true**` : 'false'}
-                            Guild Update: ${x.guild_events.update? `**true**` : 'false'}
-                            Invites Created/Deleted: ${x.guild_events.invites? `**true**` : 'false'}`,
+                            value: `All Events: ${ctx.icons[x.guild_events.all]}
+                            Guild Update: ${ctx.icons[x.guild_events.update]}
+                            Invites Created/Deleted: ${ctx.icons[x.guild_events.invites]}`,
                             inline: true
                         },
                         {
                             name: "Member Events",
-                            value: `All Events: ${x.member_events.all? `**true**` : 'false'}
-                            Member Join: ${x.member_events.add? `**true**` : 'false'}
-                            Member Update: ${x.member_events.update? `**true**` : 'false'}
-                            Member Leave: ${x.member_events.remove? `**true**` : 'false'}
-                            Presence Update: ${x.member_events.presence? `**true**` : 'false'}`,
+                            value: `All Events: ${ctx.icons[x.member_events.all]}
+                            Member Join: ${ctx.icons[x.member_events.add]}
+                            Member Update: ${ctx.icons[x.member_events.update]}
+                            Member Leave: ${ctx.icons[x.member_events.remove]}
+                            Presence Update: ${ctx.icons[x.member_events.presence]}`,
                             inline: true
                         },
                         {
                             name: "User Events",
-                            value: `All Events: ${x.user_events.all? `**true**` : 'false'}
-                            Discriminator Change: ${x.user_events.discriminator? `**true**` : 'false'}
-                            Username Change: ${x.user_events.username? `**true**` : 'false'}
-                            Avatar Change: ${x.user_events.avatar? `**true**` : 'false'}`,
+                            value: `All Events: ${ctx.icons[x.user_events.all]}
+                            Discriminator Change: ${ctx.icons[x.user_events.discriminator]}
+                            Username Change: ${ctx.icons[x.user_events.username]}
+                            Avatar Change: ${ctx.icons[x.user_events.avatar]}`,
                             inline: true
                         },
                         {
                             name: "Role Events",
-                            value: `All Events: ${x.role_events.all? `**true**` : 'false'}
-                            Role Create: ${x.role_events.create? `**true**` : 'false'}
-                            Role Update: ${x.role_events.update? `**true**` : 'false'}
-                            Role Delete: ${x.role_events.delete? `**true**` : 'false'}`,
+                            value: `All Events: ${ctx.icons[x.role_events.all]}
+                            Role Create: ${ctx.icons[x.role_events.create]}
+                            Role Update: ${ctx.icons[x.role_events.update]}
+                            Role Delete: ${ctx.icons[x.role_events.delete]}`,
                             inline: true
                         },
                         {
                             name: "Voice Events",
-                            value: `All Events: ${x.voice_events.all? `**true**` : 'false'}
-                            Join Channel: ${x.voice_events.join? `**true**` : 'false'}
-                            Switch Channel: ${x.voice_events.switch? `**true**` : 'false'}
-                            Leave Channel: ${x.voice_events.leave? `**true**` : 'false'}
-                            Voice State: ${x.voice_events.state? `**true**` : 'false'}`,
+                            value: `All Events: ${ctx.icons[x.voice_events.all]}
+                            Join Channel: ${ctx.icons[x.voice_events.join]}
+                            Switch Channel: ${ctx.icons[x.voice_events.switch]}
+                            Leave Channel: ${ctx.icons[x.voice_events.leave]}
+                            Voice State: ${ctx.icons[x.voice_events.state]}`,
                             inline: true
                         }
                     ],
@@ -105,18 +114,26 @@ pcmd(["administrator"], ['log', 'info'], ['log', 'status'], ['log', 'list'], ['l
     } else {
         await ctx.reply('There are no active log channels in this server!', 'red')
     }
-    // await ctx.send(ctx.message.channel.id, list[0])
-
 })
 
 pcmd(['administrator'], ['log', 'add'], ['log', 'enable'], async (ctx, ...args) => {
-    let pArgs = parseArgs(ctx, ...args)
-    if (pArgs.events.length === 0) {
-        return ctx.reply('At least 1 event is required to use this command. To figure out')
+    let log = await Logs.findOne({channel_id: ctx.message.channel.id, guild_id: ctx.message.guildID})
+    if (!log) {
+        log = new Logs()
+        log.channel_id = ctx.message.channel.id
+        log.guild_id = ctx.message.guildID
     }
+    let swapped = await strictLogArgs(ctx, log, true, ...args)
+    await ctx.reply(swapped.swapped.join(' '))
 })
 
 pcmd(['administrator'], ['log', 'remove'], ['log', 'disable'], async (ctx, ...args) => {
-    let pArgs = parseArgs(ctx, ...args)
-
+    let log = await Logs.findOne({channel_id: ctx.message.channel.id, guild_id: ctx.message.guildID})
+    if (!log) {
+        log = new Logs()
+        log.channel_id = ctx.message.channel.id
+        log.guild_id = ctx.message.guildID
+    }
+    let swapped = await strictLogArgs(ctx, log, false, ...args)
+    await ctx.reply(swapped.swapped.join(' '))
 })

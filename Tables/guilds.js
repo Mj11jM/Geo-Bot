@@ -9,13 +9,8 @@ module.exports = model('Guilds', new Schema({
 
 
     greeting_images:      { type: Array, default: [] },
-    log_channel:          { type: Array, default: [] },
     moderators:           { type: Array, default: [] },
     game_channels:        { type: Array, default: [] },
     reaction_roles:       { type: Array, default: [] },
-
-
-
-
 
 }))

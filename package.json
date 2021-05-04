@@ -16,6 +16,7 @@
     "discord-paginator": "^0.8.13",
     "eris": "github:abalabahaha/eris#dev",
     "lodash": "^4.17.21",
-    "mongoose": "^5.12.3"
+    "mongoose": "^5.12.3",
+    "pretty-ms": "^7.0.1"
   }
 }
