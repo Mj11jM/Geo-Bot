@@ -97,15 +97,17 @@ const member_update = async (ctx, guild, member, oldMember) => {
                 text: new Date().toLocaleString('en-gb', {hour12:false})
             },
         }
+        let changed = ''
+        diff.map(x => changed += `<@&${x}>\n`)
         if (add) {
             embed.fields.push({
                 name: "Role Added",
-                value: `<@&${diff[0]}>`
+                value: changed
             })
         } else {
             embed.fields.push({
                 name: "Role Removed",
-                value: `<@&${diff[0]}>`
+                value: changed
             })
         }
         logList.map(async (x) => {

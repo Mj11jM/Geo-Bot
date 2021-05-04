@@ -3,6 +3,7 @@ const {Reactions} = require('../Tables')
 const _ = require('lodash')
 
 pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'], ['rero', 'add'], async (ctx, ...args) => {
+    args = args.filter(x => x !== '').map(y => y.replace('\\', ''))
     const groups = _.chunk(args, 2)
     const pairs = []
     const rError = []
@@ -12,11 +13,11 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
     groups.map(x => {
         let reroPair = {}
         let role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[0]) ||
-            (y.name.toLowerCase() === x[0].replace('_', ' ')))
+            (y.name.toLowerCase() === x[0].replace(/_/g, ' ')))
         let emoji = x[1].split(':')
         if (role.length === 0) {
             role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[1]) ||
-                (y.name.toLowerCase() === x[1].replace('_', ' ')))
+                (y.name.toLowerCase() === x[1].replace(/_/g, ' ')))
             emoji = x[0].split(':')
         }
         if (role.length === 0) {
