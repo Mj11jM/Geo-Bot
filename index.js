@@ -12,6 +12,10 @@ const config = require('./config.json')
 const commands = require('./Commands')
 const {fetchOrCreateUser} = require("./Modules/users");
 const {fetchOrCreateGuild} = require('./Modules/guilds')
+const {
+    checkReminders,
+    deleteReminders
+} = require('./Modules/reminders')
 
 const {
     Channel,
@@ -24,12 +28,12 @@ const {
 } = require('./Events')
 
 module.exports.schemas = require('./Tables')
-const bot = new Discord(config.token, {maxShards: config.shards, getAllUsers: true, autoreconnect:true})
+const bot = new Discord(config.dev? config["token-dev"]: config.token, {maxShards: config.shards, getAllUsers: true, autoreconnect:true})
 const pgn = paginator.create({bot,  pgnButtons: ['first', 'last', 'back', 'forward']})
 const mongooseConnection = mongoose.connect(config.databaseURL, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true})
 
 
-const send = (channel, message) => {
+const send = (channel, message, content) => {
     if ((typeof message === "string"))
         message = embedBuilder(message, 'green')
 
@@ -38,6 +42,9 @@ const send = (channel, message) => {
 
     if(!message.color)
         message.color = colors['green']
+
+    if (content)
+        return bot.createMessage(channel, {content: content, embed: message})
 
     return bot.createMessage(channel, {embed: message})
 }
@@ -86,6 +93,9 @@ bot.on('ready', async () => {
 })
 
 bot.on('messageCreate', async (message) => {
+    if (config.dev && message.author.id !== config.owner) {
+        return
+    }
     let curGuild = await fetchOrCreateGuild(message)
     if (!curGuild) {
         curGuild = {
@@ -115,8 +125,8 @@ bot.on('messageCreate', async (message) => {
 
 })
 
-bot.on('error', (error, id) => {
-    if (error.code == 1006 || error.code == 1001) {
+bot.on('error', (error) => {
+    if (error.code && (error.code == 1006 || error.code == 1001)) {
         console.log('Connection reset')
     } else {
         console.log(error)
@@ -261,6 +271,20 @@ bot.on('voiceChannelSwitch', async (member, newChannel, oldChannel) => {
 bot.on('voiceStateUpdate', async (member, oldVoiceState) => {
     await Voice.state_update(context, member, oldVoiceState)
 })
+
+const tick = () => {
+    const now = new Date()
+    checkReminders(context, now)
+}
+
+const ctick = () => {
+    const now = new Date()
+    deleteReminders(context, now)
+}
+
+setInterval(tick.bind({}, context), 1000)
+setInterval(ctick.bind({}, context), 60000)
+
 
 bot.connect()
 

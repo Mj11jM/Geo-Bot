@@ -7,7 +7,7 @@ pcmd(['manageMessages'], 'purge', async (ctx, ...args) => {
     let messages
 
     if (pArgs.ids.length > 0) {
-        messages = await ctx.message.channel.getMessages(100)
+        messages = await ctx.message.channel.getMessages(250)
     } else {
         messages = await ctx.message.channel.getMessages(Number(pArgs.extra[0]) + 1)
     }
@@ -23,4 +23,8 @@ pcmd(['manageMessages'], 'purge', async (ctx, ...args) => {
         }
     })
     await ctx.message.channel.deleteMessages(msgList, 'purge')
+})
+
+pcmd(['administrator'], ['set', 'prefix'], ['change', 'prefix'], ['prefix', 'set'], ['setprefix'], ['prefixset'], async (ctx, ...args) => {
+
 })
