@@ -1,0 +1,8 @@
+{
+  "token": "Public Bot Token",
+  "token-dev": "Dev Bot Token",
+  "databaseURL": "MongoDB URL Here",
+  "shards": 1,
+  "owner": "Your Discord ID ",
+  "dev": false
+}

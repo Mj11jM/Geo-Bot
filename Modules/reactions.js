@@ -3,7 +3,7 @@ const {Reactions} = require('../Tables')
 const reactionRoleHandler = async (ctx, message, reaction, member, add) => {
     let reroDB = await Reactions.findOne({guild_id: message.guildID, message_id: message.id})
     if (!reroDB) {
-        return
+        return false
     }
     let dbReaction = `${reaction.name}${reaction.id? `:${reaction.id}`: ''}`
     let dbReros = reroDB.reaction_roles.filter(x => x.emoji === dbReaction).shift()
@@ -20,7 +20,16 @@ const reactionRoleHandler = async (ctx, message, reaction, member, add) => {
     }
 }
 
+const repeatReactionHandler = async (ctx, message, reaction, member) => {
+
+}
+
+const singleVotePollHandler = async (ctx, message, reaction, member) => {
+
+}
+
 
 module.exports = {
-    reactionRoleHandler
+    reactionRoleHandler,
+    repeatReactionHandler,
 }

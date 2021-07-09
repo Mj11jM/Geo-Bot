@@ -13,8 +13,21 @@ pcmd(["administrator"], 'log', async (ctx, ...args) => {
         log.guild_id = ctx.message.guildID
         log.channel_id = ctx.message.channel.id
     }
-    const swapped = looseLogArgs(ctx, log, args)
-    await ctx.reply()
+    const swapped = await looseLogArgs(ctx, log, args)
+    await log.save()
+    if (!swapped)
+        return ctx.reply('An argument is required for this command!', 'red')
+    let embed = {
+        description: "Logging for this channel has been edited!",
+        fields: []
+    }
+    if (swapped.enabled.length > 0)
+        embed.fields.push({name: "Logs Enabled", value: swapped.enabled.join(" ")})
+    if (swapped.disabled.length > 0)
+        embed.fields.push({name: "Logs Disabled", value: swapped.disabled.join(" ")})
+    if (swapped.not_found.length > 0)
+        embed.fields.push({name: "Logs Not Found", value: swapped.not_found.join(" ")})
+    await ctx.reply(embed)
 })
 
 pcmd(["administrator"], ['log', 'all'], ['log', 'everything'], async (ctx, ...args) => {

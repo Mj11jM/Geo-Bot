@@ -1,0 +1,87 @@
+[
+  {
+    "type": ["base", "all"],
+    "title": "Main Help",
+    "description": "This is the main help page for Geo-Bot. Listed below are the different modules and commands within them. You may either do `--help [module]` or `--help [command]` to find more information on commands within a grouping or specifications on a command and it's syntax.",
+    "fields": [
+      {
+        "name": "Roles",
+        "value": "`reaction role add`",
+        "inline": true
+      },
+      {
+        "name": "Reminders",
+        "value": "`remind me\nremind here\nremind list\nremind delete`",
+        "inline": true
+      },
+      {
+        "name": "Polls",
+        "value": "`To be made`",
+        "inline": true
+      },
+      {
+        "name": "Logging",
+        "value": "`log\nlog all\nlog info\nlog add/enable\nlog remove/disable`",
+        "inline": true
+      },
+      {
+        "name": "Moderation",
+        "value": "`prune`",
+        "inline": true
+      }
+    ]
+  },
+  {
+    "type": ["log", "logging", "logs"],
+    "title": "Logs",
+    "description": "Logging",
+    "fields": [
+      {
+        "name": "log",
+        "value": "logger",
+        "inline": false
+      }
+    ]
+  },
+  {
+    "type": ["reminder", "remind", "reminders"],
+    "title": "",
+    "description": "",
+    "fields": [
+      {
+        "name": "",
+        "value": "",
+        "inline": false
+      }
+    ]
+  },
+  {
+    "type": ["polls", "poll"],
+    "title": "Not implemented",
+    "description": "Not implemented",
+    "fields": [
+      {
+        "name": "Not implemented",
+        "value": "Not implemented",
+        "inline": false
+      }
+    ]
+  },
+  {
+    "type": ["purge", "prune"],
+    "title": "Prune/Purge",
+    "description": "This command requires the user to have `manageMessages` permission.",
+    "fields": [
+      {
+        "name": "prune #",
+        "value": "Run this command to delete messages in bulk. Please note due to discord limitations you cannot delete messages older than 14 days with this command.\nExample: `--prune 50` will delete the last 50 messages",
+        "inline": false
+      },
+      {
+        "name": "prune (@user or User ID) #",
+        "value": "This command will delete only messages sent by the provided user mention or ID within the last 250 messages in the channel.\nExample: `--prune @Mj11jM#1111 50` will delete the last 50 messages sent by @Mj11jM within the last 250 total messages.",
+        "inline": false
+      }
+    ]
+  }
+]

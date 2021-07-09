@@ -49,12 +49,16 @@ const getTimeFromReminder = async (text) => {
                     now += (parseInt(amount) * (60000 * 60 * 24))
                     amount = ''
                     break
+                case 'w':
+                    now += (parseInt(amount) * (60000 * 60 * 24 * 7))
+                    amount = ''
+                    break
                 case 'M':
                     now += (parseInt(amount) * (60000 * 60 * 24 * 30))
                     amount = ''
                     break
                 case 'y':
-                    now += (parseInt(amount) * (60000 * 60 * 24* 30 * 12))
+                    now += (parseInt(amount) * (60000 * 60 * 24 * 30 * 12))
                     amount = ''
                     break
                 default:

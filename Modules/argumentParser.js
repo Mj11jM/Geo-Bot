@@ -166,7 +166,7 @@ const strictLogArgs = async (ctx, log, enable, ...args) => {
     return swapped
 }
 
-const looseLogArgs = async (ctx, log, ...args) => {
+const looseLogArgs = async (ctx, log, args) => {
     if (args.length === 0) {
         return false
     }
@@ -176,118 +176,117 @@ const looseLogArgs = async (ctx, log, ...args) => {
         disabled: [],
         not_found: []
     }
-
     args.map(x => {
         switch (x) {
             case 'guild_update':
-                log.guild_events.update? swapped.disabled.push(): swapped.enabled.push()
+                log.guild_events.update? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.guild_events.update = !log.guild_events.update
                 break
             case 'invites':
-                log.guild_events.invites? swapped.disabled.push(): swapped.enabled.push()
+                log.guild_events.invites? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.guild_events.invites = !log.guild_events.invites
                 break
             case 'channel_create':
-                log.channel_events.create? swapped.disabled.push(): swapped.enabled.push()
+                log.channel_events.create? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.channel_events.create = !log.channel_events.create
                 break
             case 'channel_delete':
-                log.channel_events.delete? swapped.disabled.push(): swapped.enabled.push()
+                log.channel_events.delete? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.channel_events.delete = !log.channel_events.delete
                 break
             case 'channel_update':
-                log.channel_events.update? swapped.disabled.push(): swapped.enabled.push()
+                log.channel_events.update? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.channel_events.update = !log.channel_events.update
                 break
             case 'channel_pin_update':
-                log.channel_events.pins? swapped.disabled.push(): swapped.enabled.push()
+                log.channel_events.pins? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.channel_events.pins = !log.channel_events.pins
                 break
             case 'avatar_change':
-                log.user_events.avatar? swapped.disabled.push(): swapped.enabled.push()
+                log.user_events.avatar? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.user_events.avatar = !log.user_events.avatar
                 break
             case 'username_change':
-                log.user_events.username? swapped.disabled.push(): swapped.enabled.push()
+                log.user_events.username? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.user_events.username = !log.user_events.username
                 break
             case 'discriminator_change':
-                log.user_events.discriminator? swapped.disabled.push(): swapped.enabled.push()
+                log.user_events.discriminator? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.user_events.discriminator = !log.user_events.discriminator
                 break
             case 'member_join':
-                log.member_events.join? swapped.disabled.push(): swapped.enabled.push()
+                log.member_events.join? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.member_events.join = !log.member_events.join
                 break
             case 'member_update':
-                log.member_events.update? swapped.disabled.push(): swapped.enabled.push()
+                log.member_events.update? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.member_events.update = !log.member_events.update
                 break
             case 'member_leave':
-                log.member_events.leave? swapped.disabled.push(): swapped.enabled.push()
+                log.member_events.leave? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.member_events.leave = !log.member_events.leave
                 break
             case 'presence_update':
-                log.member_events.presence? swapped.disabled.push(): swapped.enabled.push()
+                log.member_events.presence? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.member_events.presence = !log.member_events.presence
                 break
             case 'join_channel':
-                log.voice_events.join? swapped.disabled.push(): swapped.enabled.push()
+                log.voice_events.join? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.voice_events.join = !log.voice_events.join
                 break
             case 'switch_channel':
-                log.voice_events.switch? swapped.disabled.push(): swapped.enabled.push()
+                log.voice_events.switch? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.voice_events.switch = !log.voice_events.switch
                 break
             case 'leave_channel':
-                log.voice_events.leave? swapped.disabled.push(): swapped.enabled.push()
+                log.voice_events.leave? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.voice_events.leave = !log.voice_events.leave
                 break
             case 'voice_state':
-                log.voice_events.state? swapped.disabled.push(): swapped.enabled.push()
+                log.voice_events.state? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.voice_events.state = !log.voice_events.state
                 break
             case 'role_create':
-                log.role_events.create? swapped.disabled.push(): swapped.enabled.push()
+                log.role_events.create? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.role_events.create = !log.role_events.create
                 break
             case 'role_delete':
-                log.role_events.delete? swapped.disabled.push(): swapped.enabled.push()
+                log.role_events.delete? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.role_events.delete = !log.role_events.delete
                 break
             case 'role_update':
-                log.role_events.update? swapped.disabled.push(): swapped.enabled.push()
+                log.role_events.update? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.role_events.update = !log.role_events.update
                 break
             case 'channel_events':
-                log.channel_events.all? swapped.disabled.push(): swapped.enabled.push()
+                log.channel_events.all? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.channel_events.all = !og.channel_events.all
                 break
             case 'guild_events':
-                log.guild_events.all? swapped.disabled.push(): swapped.enabled.push()
+                log.guild_events.all? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.guild_events.all = !log.guild_events.all
                 break
             case 'member_events':
-                log.member_events.all? swapped.disabled.push(): swapped.enabled.push()
+                log.member_events.all? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.member_events.all = !log.member_events.all
                 break
             case 'user_events':
-                log.user_events.all? swapped.disabled.push(): swapped.enabled.push()
+                log.user_events.all? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.user_events.all = !log.user_events.all
                 break
             case 'role_events':
-                log.role_events.all? swapped.disabled.push(): swapped.enabled.push()
+                log.role_events.all? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.role_events.all = !log.role_events.all
                 break
             case 'voice_events':
-                log.voice_events.all? swapped.disabled.push(): swapped.enabled.push()
+                log.voice_events.all? swapped.disabled.push(x): swapped.enabled.push(x)
                 log.voice_events.all = !log.voice_events.all
                 break
             default:
                 swapped.not_found.push(x)
         }
     })
-    await log.save()
+
     return swapped
 }
 
