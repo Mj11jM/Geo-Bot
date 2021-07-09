@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 const member_add = async (ctx, guild, member) => {
     let logList = await Logs.find({guild_id: guild.id})
-    logList.filter(x => x.all_events || x.member_events.add || x.member_events.all)
+    logList = logList.filter(x => x.all_events || x.member_events.add || x.member_events.all)
     if (logList.length === 0) {
         return
     }
@@ -40,7 +40,7 @@ const member_add = async (ctx, guild, member) => {
 
 const member_remove = async (ctx, guild, member) => {
     let logList = await Logs.find({guild_id: guild.id})
-    logList.filter(x => x.all_events || x.member_events.remove || x.member_events.all)
+    logList = logList.filter(x => x.all_events || x.member_events.remove || x.member_events.all)
     if (logList.length === 0) {
         return
     }
@@ -86,7 +86,7 @@ const member_remove = async (ctx, guild, member) => {
 
 const member_update = async (ctx, guild, member, oldMember) => {
     let logList = await Logs.find({guild_id: guild.id})
-    logList.filter(x => x.all_events || x.member_events.update || x.member_events.all)
+    logList = logList.filter(x => x.all_events || x.member_events.update || x.member_events.all)
     if (logList.length === 0) {
         return
     }
