@@ -44,6 +44,8 @@ const member_remove = async (ctx, guild, member) => {
     if (logList.length === 0) {
         return
     }
+    let roles = ''
+    member.roles.map(x => roles += `<@&${x}> `)
     const embed = {
         author: {
             name: `Member Left ${member.username}!`,
@@ -63,6 +65,10 @@ const member_remove = async (ctx, guild, member) => {
             {
                 name: "Joined On",
                 value:  new Date(member.joinedAt).toLocaleString('en-gb', {hour12:false})
+            },
+            {
+              name: "Roles",
+              value: roles
             },
             {
                 name: "Time Since Joined",
