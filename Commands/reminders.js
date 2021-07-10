@@ -27,6 +27,18 @@ cmd(['remind', 'me'], async (ctx, ...args) => {
 cmd(['remind', 'here'], async (ctx, ...args) => {
     let time = ctx.msg.shift()
     time = await getTimeFromReminder(time)
+    let hasPermission = true
+    ctx.msg.map(x=> {
+        if (x.startsWith('<@&')) {
+            let roleID = x.slice(3, (x.length - 1))
+            let role = ctx.message.channel.guild.roles.find(i => i.id === roleID)
+            if (!role.mentionable && !ctx.message.member.permissions.has('mentionEveryone')){
+                hasPermission = false
+            }
+        }
+    })
+    if (!hasPermission)
+        return ctx.reply('You do not have the valid permissions to setup this reminder. You need to have the permissions to mention all roles for this message, or the role must be made publicly mentionable!', 'red')
     let message = ctx.msg.join(' ')
 
     let dbReminder = new Reminders()

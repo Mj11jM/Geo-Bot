@@ -51,7 +51,6 @@ const send = (channel, message, content) => {
 
 const embedBuilder = (message, color) => {
     if(typeof message === 'object') {
-        message.description = `${message.description}`
         message.color = colors[color]
         return message
     }
@@ -65,8 +64,19 @@ const direct = async (user, string, color = 'green') => {
 }
 
 const icons = {
-    true: `✅`,
-    false: `❌`
+    zero:   '0️⃣',
+    one:    '1️⃣',
+    two:    '2️⃣',
+    three:  '3️⃣',
+    four:   '4️⃣',
+    five:   '5️⃣',
+    six:    '6️⃣',
+    seven:  '7️⃣',
+    eight:  '8️⃣',
+    nine:   '9️⃣',
+    ten:    '🔟',
+    true:   `✅`,
+    false:  `❌`,
 }
 
 
@@ -81,6 +91,28 @@ const context = {
 
 }
 
+// Preparation for the future where I actually use buttons!
+
+
+// bot.on('rawWS', async (event) => {
+//     if (event.t === 'INTERACTION_CREATE') {
+//         // console.log(event)
+//         let url = `/interactions/${event.d.id}/${event.d.token}/callback`
+//         bot.emit('INTERACTION_CREATE', event.d)
+//         let body = {
+//             "type": 4,
+//             "data": {
+//                 "content": `<@${event.d.member.user.id}> YOU CLICKED THE TEST BUTTON!`
+//             }
+//         }
+//         return bot.requestHandler.request("POST", url, true, body)
+//     }
+// })
+//
+// bot.on('INTERACTION_CREATE', async (data) => {
+//     console.log(data)
+// })
+
 /*
 0 = Playing
 2 = Listening To
@@ -93,9 +125,6 @@ bot.on('ready', async () => {
 })
 
 bot.on('messageCreate', async (message) => {
-    if (config.dev && message.author.id !== config.owner) {
-        return
-    }
     let curGuild = await fetchOrCreateGuild(message)
     if (!curGuild) {
         curGuild = {
@@ -106,7 +135,7 @@ bot.on('messageCreate', async (message) => {
         return
     }
 
-    const reply = (string, color = 'green') => send(message.channel.id, embedBuilder(string, color))
+    const reply = (string, color = 'green', content = '') => send(message.channel.id, embedBuilder(string, color), content)
     const curUser = await fetchOrCreateUser(message)
 
     const msg = message.content.trim().substr(curGuild.prefix.length).split(' ')
@@ -224,7 +253,7 @@ bot.on('messageUpdate', async (message, oldMessage) => {
 ----------------------------------------------------------------------------
  */
 bot.on('messageReactionAdd', async (message, reaction, member) => {
-    let fetchedMessage = await bot.getMessage(message.channel.id, message.id)
+    let fetchedMessage = await bot.getMessage(message.channel.id, message.id).catch(e => e)
     await Reaction.reaction_add(context, fetchedMessage, reaction, member)
 })
 bot.on('messageReactionRemove', async (message, reaction, memberID) => {
