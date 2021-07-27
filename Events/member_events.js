@@ -46,6 +46,8 @@ const member_remove = async (ctx, guild, member) => {
     }
     let roles = ''
     member.roles.map(x => roles += `<@&${x}> `)
+    if (roles === '')
+        roles = 'None'
     const embed = {
         author: {
             name: `Member Left ${member.username}!`,
