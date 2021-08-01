@@ -8,9 +8,18 @@ const guild_create = async (ctx, guild) => {
         guild.guild_name = guild.name
         await newGuild.save()
     }
+    await ctx.bot.editStatus('online', {name: `over ${ctx.bot.guilds.size} server(s)`, type: 3})
 }
 
 const guild_delete = async (ctx, guild) => {
+
+}
+
+const ban_add = async (ctx, guild, user) => {
+
+}
+
+const ban_remove = async (ctx, guild, user) => {
 
 }
 
@@ -31,6 +40,8 @@ const invite_delete = async (ctx, guild, invite) => {
 }
 
 module.exports = {
+    ban_add,
+    ban_remove,
     guild_create,
     guild_delete,
     guild_update,

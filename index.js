@@ -196,6 +196,12 @@ bot.on('guildEmojisUpdate', async (guild, newEmoji, oldEmoji) => {
 bot.on('guildUpdate', async (newGuild, oldGuild) => {
     await Guild.guild_update(context, newGuild, oldGuild)
 })
+bot.on('guildBanAdd', async (guild, user) => {
+    await Guild.ban_add(context, guild, user)
+})
+bot.on('guildBanRemove', async (guild, user) => {
+    await Guild.ban_remove(context, guild, user)
+})
 bot.on('inviteDelete', async (guild, invite) => {
     await Guild.invite_delete(context, guild, invite)
 })

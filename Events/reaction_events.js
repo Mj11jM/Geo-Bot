@@ -1,6 +1,7 @@
 const {
     reactionRoleHandler,
-    repeatReactionHandler} = require('../Modules/reactions')
+    repeatReactionHandler
+} = require('../Modules/reactions')
 
 const reaction_add = async (ctx, message, reaction, member) => {
     ctx.pgn.trigger(member, message, reaction.name)

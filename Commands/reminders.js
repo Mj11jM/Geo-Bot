@@ -95,6 +95,4 @@ cmd(['remind', 'delete'], ['reminder', 'delete'], async (ctx, ...args) => {
     await Reminders.deleteOne(toDelete)
 
     return ctx.reply(`Deleted reminder **${number}**!`)
-
-
 })
