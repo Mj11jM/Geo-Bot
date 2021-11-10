@@ -5,7 +5,7 @@ const reactionRoleHandler = async (ctx, message, reaction, member, add) => {
     if (!reroDB) {
         return false
     }
-    let dbReaction = `${reaction.name}${reaction.id? `:${reaction.id}`: ''}`
+    let dbReaction = `${reaction.name.toLowerCase()}${reaction.id? `:${reaction.id}`: ''}`
     let dbReros = reroDB.reaction_roles.filter(x => x.emoji === dbReaction).shift()
     if (!dbReros) {
         if (add) {
@@ -18,6 +18,7 @@ const reactionRoleHandler = async (ctx, message, reaction, member, add) => {
     } else {
         await member.removeRole(dbReros.role)
     }
+    return true
 }
 
 const repeatReactionHandler = async (ctx, message, reaction, member) => {
