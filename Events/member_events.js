@@ -4,6 +4,8 @@ const _ = require('lodash')
 
 const member_add = async (ctx, guild, member) => {
     let botGuild = await Guild.findOne({guild_id: guild.id})
+    if (botGuild && botGuild.auto_role)
+        await member.addRole(botGuild.auto_role)
     let logList = await Logs.find({guild_id: guild.id})
     logList = logList.filter(x => x.all_events || x.member_events.add || x.member_events.all)
     if (logList.length === 0) {
@@ -37,8 +39,6 @@ const member_add = async (ctx, guild, member) => {
     logList.map(async (x) => {
         await ctx.send(x.channel_id, embed)
     })
-    if (botGuild && botGuild.auto_role)
-        await member.addRole(botGuild.auto_role)
 }
 
 const member_remove = async (ctx, guild, member) => {
