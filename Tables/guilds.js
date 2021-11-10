@@ -2,10 +2,11 @@ const {model, Schema} = require('mongoose')
 
 module.exports = model('Guilds', new Schema({
     guild_id:             { type: String, index: true },
+    prefix:               { type: String, default: ">" },
     guild_name:           { type: String },
-    prefix:               { type: String, default: "--"},
     greeting:             { type: String },
     greeting_channel:     { type: String },
+    auto_role:            { type: String },
 
 
     greeting_images:      { type: Array, default: [] },
