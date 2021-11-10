@@ -28,7 +28,24 @@ const {
 } = require('./Events')
 
 module.exports.schemas = require('./Tables')
-const bot = new Discord(config.dev? config["token-dev"]: config.token, {maxShards: config.shards, getAllUsers: true, autoreconnect:true})
+const bot = new Discord(config.dev? config["token-dev"]: config["token-main"],
+    {
+        maxShards: config.shards, getAllUsers: true, autoreconnect:true,
+        intents: [
+            "directMessages",
+            "guildBans",
+            "guildEmojisAndStickers",
+            "guildInvites",
+            "guildMembers",
+            "guildMessages",
+            "guildVoiceStates",
+            "guildWebhooks",
+            "guilds",
+            "guildMessageReactions",
+            "guildPresences",
+            "guildIntegrations",
+            "directMessageReactions"]
+    })
 const pgn = paginator.create({bot,  pgnButtons: ['first', 'last', 'back', 'forward']})
 const mongooseConnection = mongoose.connect(config.databaseURL, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true})
 
@@ -121,10 +138,10 @@ const context = {
 bot.on('ready', async () => {
     await bot.editStatus('online', {name: `over ${bot.guilds.size} server(s)`, type: 3})
     console.log(`${bot.user.username} online in ${bot.guilds.size} guild(s) with ${bot.users.size} users in them`)
-
 })
 
 bot.on('messageCreate', async (message) => {
+
     let curGuild = await fetchOrCreateGuild(message)
     if (!curGuild) {
         curGuild = {
