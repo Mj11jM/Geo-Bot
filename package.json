@@ -17,6 +17,7 @@
     "eris": "github:abalabahaha/eris#dev",
     "lodash": "^4.17.21",
     "mongoose": "^5.12.3",
-    "pretty-ms": "^7.0.1"
+    "pretty-ms": "^7.0.1",
+    "tmi.js": "^1.8.5"
   }
 }
