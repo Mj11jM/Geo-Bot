@@ -12,9 +12,12 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
     let message = ``
     groups.map(x => {
         let reroPair = {}
+        //Check for the role being in position 0 without or with _
         let role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[0]) ||
             (y.name.toLowerCase() === x[0].replace(/_/g, ' ')))
         let emoji = x[1].split(':')
+
+        //If no role found for this group, swap role and emoji
         if (role.length === 0) {
             role = ctx.message.member.guild.roles.filter(y => (y.name.toLowerCase() === x[1]) ||
                 (y.name.toLowerCase() === x[1].replace(/_/g, ' ')))
@@ -23,6 +26,7 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
         if (role.length === 0) {
             roleError = true
             rError.push([x[0], x[1]])
+            return
         }
         let message_emoji = emoji.join(':')
         if (emoji.length > 1) {
@@ -51,7 +55,7 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
         await ctx.send(ctx.message.channel.id, embed).then(async (message) => {
             reroDB.message_id = message.id
             await reroDB.save()
-            await pairs.map( async (x) => {
+            pairs.map( async (x) => {
                 await message.addReaction(x.emoji).catch(async (e) => {
                     await Reactions.findOneAndDelete({guild_id: message.guildID, message_id: message.id})
                     await message.delete().catch(e => e)
