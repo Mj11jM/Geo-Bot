@@ -3,7 +3,7 @@ const {parseArgs} = require('../Modules/argumentParser')
 
 
 pcmd(['manageMessages'], 'purge', 'prune', async (ctx, ...args) => {
-    let pArgs = await parseArgs(ctx, ...args)
+    let pArgs = await parseArgs(ctx, args)
     let messages
 
     if (pArgs.ids.length > 0) {
@@ -29,5 +29,31 @@ pcmd(['manageMessages'], 'purge', 'prune', async (ctx, ...args) => {
     }
 })
 
-pcmd(['administrator'], ['set', 'prefix'], ['change', 'prefix'], ['prefix', 'set'], ['setprefix'], ['prefixset'], async (ctx, ...args) => {
+pcmd(['manageServer'], ['set', 'prefix'], ['change', 'prefix'], ['prefix', 'set'], ['setprefix'], ['prefixset'], async (ctx, arg) => {
+    if(!arg)
+        return ctx.reply('You need to specify a prefix to change to!', 'red')
+    if (arg.length > 5)
+        return ctx.reply('Prefix can not be longer than 5 characters!', 'red')
+    ctx.guild.prefix = arg
+    await ctx.guild.save()
+    return ctx.reply(`Guild prefix has been set to \`${arg}\``)
+})
+
+pcmd(['administrator'], ['autorole', 'set'], ['autorole', 'add'], async(ctx, ...args) => {
+    let pArgs = await parseArgs(ctx, args)
+    if (pArgs.ids.length === 0)
+        return ctx.reply('Please supply a role to set for autorole!', 'red')
+
+    let roleCheck = ctx.message.channel.guild.roles.has(pArgs.ids[0])
+    if (!roleCheck)
+        return ctx.reply('Invalid role supplied, please check you are using a valid role mention or ID', 'red')
+    ctx.guild.auto_role = pArgs.ids[0]
+    await ctx.guild.save()
+    return ctx.reply(`Autorole has been set to <@&${pArgs.ids[0]}>`)
+})
+
+pcmd(['administrator'], ['autorole', 'remove'], ['autorole', 'delete'], async(ctx, ...args) => {
+    ctx.guild.auto_role = null
+    await ctx.guild.save()
+    return ctx.reply(`Autorole has been removed!`)
 })

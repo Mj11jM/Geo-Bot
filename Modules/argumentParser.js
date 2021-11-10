@@ -1,4 +1,4 @@
-const parseArgs = async (ctx, ...args) => {
+const parseArgs = async (ctx, args) => {
     if (args.length === 0) {
         return false
     }
@@ -297,7 +297,7 @@ const tryGetUserID = (inp) => {
         if (/^\d+$/.test(inp) && inp > (1000 * 60 * 60 * 24 * 30 * 2 ** 22)){
             return inp;
         } else {
-            return inp.slice(0, -1).split('@')[1].replace('!', '');
+            return inp.slice(0, -1).split('@')[1].replace('!', '').replace('&', '');
         }
     }
     catch(err) { }
