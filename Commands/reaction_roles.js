@@ -1,5 +1,5 @@
-const {pcmd} = require('../Utils/cmd')
-const {Reactions} = require('../Tables')
+const {pcmd} = require('../utils/cmd')
+const {Reactions} = require('../tables')
 const _ = require('lodash')
 
 pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'], ['rero', 'add'], async (ctx, ...args) => {

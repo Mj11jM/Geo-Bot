@@ -1,10 +1,10 @@
-const {cmd} = require('../Utils/cmd')
-const {Reminders} = require('../Tables')
+const {cmd} = require('../utils/cmd')
+const {Reminders} = require('../tables')
 const {
     getTimeFromReminder,
 
-} = require('../Modules/reminders')
-const colors = require('../Utils/colors')
+} = require('../modules/reminders')
+const colors = require('../utils/colors')
 
 cmd(['remind', 'me'], async (ctx, ...args) => {
     let time = ctx.msg.shift()

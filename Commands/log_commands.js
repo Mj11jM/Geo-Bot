@@ -1,9 +1,9 @@
-const {pcmd} = require('../Utils/cmd')
-const {Logs} = require('../Tables')
-const colors = require('../Utils/colors')
+const {pcmd} = require('../utils/cmd')
+const {Logs} = require('../tables')
+const colors = require('../utils/colors')
 const {parseArgs,
 strictLogArgs,
-looseLogArgs} = require('../Modules/argumentParser')
+looseLogArgs} = require('../modules/argumentParser')
 const _ = require('lodash')
 
 pcmd(["administrator"], 'log', async (ctx, ...args) => {

@@ -5,17 +5,17 @@ send, embedBuilder, direct, utils/cmd and utils/colors are all "borrowed" items,
 
 const Discord = require('eris')
 const mongoose = require('mongoose')
-const colors = require('./Utils/colors')
+const colors = require('./utils/colors')
 const paginator = require('discord-paginator')
-const {trigger} = require('./Utils/cmd')
+const {trigger} = require('./utils/cmd')
 const config = require('./config.json')
-const commands = require('./Commands')
-const {fetchOrCreateUser} = require("./Modules/users");
-const {fetchOrCreateGuild} = require('./Modules/guilds')
+const commands = require('./commands')
+const {fetchOrCreateUser} = require("./modules/users");
+const {fetchOrCreateGuild} = require('./modules/guilds')
 const {
     checkReminders,
     deleteReminders
-} = require('./Modules/reminders')
+} = require('./modules/reminders')
 
 const {
     Channel,
@@ -25,9 +25,9 @@ const {
     Reaction,
     Role,
     Voice,
-} = require('./Events')
+} = require('./events')
 
-module.exports.schemas = require('./Tables')
+module.exports.schemas = require('./tables')
 const bot = new Discord(config.dev? config["token-dev"]: config["token-main"],
     {
         maxShards: config.shards, getAllUsers: true, autoreconnect:true,
@@ -81,17 +81,17 @@ const direct = async (user, string, color = 'green') => {
 }
 
 const icons = {
-    zero:   '0️⃣',
-    one:    '1️⃣',
-    two:    '2️⃣',
-    three:  '3️⃣',
-    four:   '4️⃣',
-    five:   '5️⃣',
-    six:    '6️⃣',
-    seven:  '7️⃣',
-    eight:  '8️⃣',
-    nine:   '9️⃣',
-    ten:    '🔟',
+    0:   '0️⃣',
+    1:    '1️⃣',
+    2:    '2️⃣',
+    3:  '3️⃣',
+    4:   '4️⃣',
+    5:   '5️⃣',
+    6:    '6️⃣',
+    7:  '7️⃣',
+    8:  '8️⃣',
+    9:   '9️⃣',
+    10:    '🔟',
     true:   `✅`,
     false:  `❌`,
 }
@@ -145,7 +145,7 @@ bot.on('messageCreate', async (message) => {
     let curGuild = await fetchOrCreateGuild(message)
     if (!curGuild) {
         curGuild = {
-            prefix: '--'
+            prefix: '>'
         }
     }
     if(message.author.bot || !message.content.startsWith(curGuild.prefix)) {

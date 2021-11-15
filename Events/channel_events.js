@@ -1,5 +1,5 @@
-const {Logs} = require('../Tables')
-const colors = require('../Utils/colors')
+const {Logs} = require('../tables')
+const colors = require('../utils/colors')
 
 const channel_create = async (ctx, channel) => {
     if (channel.type === 1)

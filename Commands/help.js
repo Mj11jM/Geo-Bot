@@ -1,4 +1,4 @@
-const {cmd} = require('../Utils/cmd')
+const {cmd} = require('../utils/cmd')
 const helpJSON = require('../help.json')
 
 cmd('help', async (ctx, ...args) => {

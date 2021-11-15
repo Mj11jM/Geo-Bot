@@ -1,11 +1,13 @@
-const {Logs, Guild} = require('../Tables')
+const {Logs, Guild} = require('../tables')
 const msToTime = require('pretty-ms')
 const _ = require('lodash')
+const {member_log} = require("../modules/logs/member_logs");
 
 const member_add = async (ctx, guild, member) => {
     let botGuild = await Guild.findOne({guild_id: guild.id})
     if (botGuild && botGuild.auto_role)
         await member.addRole(botGuild.auto_role)
+    await member_log()
     let logList = await Logs.find({guild_id: guild.id})
     logList = logList.filter(x => x.all_events || x.member_events.add || x.member_events.all)
     if (logList.length === 0) {

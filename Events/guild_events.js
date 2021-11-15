@@ -1,4 +1,4 @@
-const {Guild} = require('../Tables')
+const {Guild} = require('../tables')
 
 const guild_create = async (ctx, guild) => {
     const priorGuild = Guild.findOne({guild_id: guild.id})

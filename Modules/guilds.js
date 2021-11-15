@@ -1,4 +1,4 @@
-const {Guild} = require("../Tables");
+const {Guild} = require("../tables");
 
 
 const fetchOrCreateGuild = async (message) => {

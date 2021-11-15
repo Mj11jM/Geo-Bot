@@ -1,4 +1,4 @@
-const {User} = require('../Tables')
+const {User} = require('../tables')
 
 
 const fetchOrCreateUser = async (message) => {

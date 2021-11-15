@@ -1,5 +1,5 @@
-const {cmd, pcmd} = require('../Utils/cmd')
-const {parseArgs} = require('../Modules/argumentParser')
+const {cmd, pcmd} = require('../utils/cmd')
+const {parseArgs} = require('../modules/argumentParser')
 
 
 pcmd(['manageMessages'], 'purge', 'prune', async (ctx, ...args) => {

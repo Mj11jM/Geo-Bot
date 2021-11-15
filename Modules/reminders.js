@@ -1,4 +1,4 @@
-const {Reminders} = require('../Tables')
+const {Reminders} = require('../tables')
 
 const checkReminders = async (ctx, now) => {
     let needsReminding = (await Reminders.find({reminded: false}).sort({remind_at: 1}))[0]

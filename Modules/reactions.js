@@ -1,4 +1,4 @@
-const {Reactions} = require('../Tables')
+const {Reactions} = require('../tables')
 
 const reactionRoleHandler = async (ctx, message, reaction, member, add) => {
     let reroDB = await Reactions.findOne({guild_id: message.guildID, message_id: message.id})
