@@ -6,7 +6,7 @@ const reactionRoleHandler = async (ctx, message, reaction, member, add) => {
         return false
     }
     let dbReaction = `${reaction.name.toLowerCase()}${reaction.id? `:${reaction.id}`: ''}`
-    let dbReros = reroDB.reaction_roles.filter(x => x.emoji === dbReaction).shift()
+    let dbReros = reroDB.reaction_roles.filter(x => x.emoji.toLowerCase() === dbReaction).shift()
     if (!dbReros) {
         if (add) {
             await message.removeReaction(dbReaction, member.id)
