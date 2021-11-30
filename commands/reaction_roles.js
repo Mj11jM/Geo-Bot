@@ -16,7 +16,7 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
         let role = ctx.message.member.guild.roles.filter(y =>
             y.name.toLowerCase() === x[0] ||
             y.name.toLowerCase() === x[0].replace(/_/g, ' ') ||
-            x[0].replaceAll(/\D/g, '') === y.id)
+            x[0].replace(/\D/g, '') === y.id)
         let emoji = x[1].split(':')
 
         //If no role found for this group, swap role and emoji
@@ -24,7 +24,7 @@ pcmd(['manageRoles'], ['reaction', 'role', 'add'], ['reaction', 'roles', 'add'],
             role = ctx.message.member.guild.roles.filter(y =>
                 y.name.toLowerCase() === x[1] ||
                 y.name.toLowerCase() === x[1].replace(/_/g, ' ') ||
-                x[1].replaceAll(/\D/g, '') === y.id)
+                x[1].replace(/\D/g, '') === y.id)
             emoji = x[0].split(':')
         }
         if (role.length === 0) {
