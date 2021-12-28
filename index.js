@@ -277,10 +277,14 @@ bot.on('messageUpdate', async (message, oldMessage) => {
  */
 bot.on('messageReactionAdd', async (message, reaction, member) => {
     let fetchedMessage = await bot.getMessage(message.channel.id, message.id).catch(e => e)
+    if (!fetchedMessage)
+        return
     await Reaction.reaction_add(context, fetchedMessage, reaction, member)
 })
 bot.on('messageReactionRemove', async (message, reaction, memberID) => {
-    let fetchedMessage = await bot.getMessage(message.channel.id, message.id)
+    let fetchedMessage = await bot.getMessage(message.channel.id, message.id).catch(e => e)
+    if (!fetchedMessage)
+        return
     let member = fetchedMessage.channel.guild.members.get(memberID)
     await Reaction.reaction_remove(context, fetchedMessage, reaction, member)
 })
