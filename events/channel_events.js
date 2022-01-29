@@ -1,6 +1,8 @@
 const {Logs} = require('../tables')
 const colors = require('../utils/colors')
 
+const chanType = ['Text', 'DM', 'Voice', 'GROUP_DM', 'Category', 'News', 'Store', 'null', 'null', 'null', 'News_Thread', 'Public_Thread', 'Private_Thread', 'Stage_Voice']
+
 const channel_create = async (ctx, channel) => {
     if (channel.type === 1)
         return
@@ -10,7 +12,6 @@ const channel_create = async (ctx, channel) => {
     if (logList.length === 0) {
         return
     }
-    const chanType = ['Text', 'Private', 'Voice']
     const embed = {
         author: {
             name: `${chanType[channel.type]} Channel Created: ${channel.name}!`
@@ -38,7 +39,6 @@ const channel_update = async (ctx, channel, oldChannel) => {
     if (logList.length === 0) {
         return
     }
-    const chanType = ['Text', 'Private', 'Voice']
     const embed = {
         author: {
             name: `${chanType[channel.type]} Channel Re-Named: ${channel.name}!`
@@ -68,7 +68,6 @@ const channel_delete = async (ctx, channel) => {
     if (logList.length === 0) {
         return
     }
-    const chanType = ['Text', 'Private', 'Voice']
     const embed = {
         author: {
             name: `${chanType[channel.type]} Channel Deleted: ${channel.name}!`
