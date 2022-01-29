@@ -5,6 +5,7 @@ const {
 
 } = require('../modules/reminders')
 const colors = require('../utils/colors')
+const {toDiscordTimestamp} = require("../modules/misc");
 
 cmd(['remind', 'me'], async (ctx, ...args) => {
     let time = ctx.msg.shift()
@@ -17,10 +18,10 @@ cmd(['remind', 'me'], async (ctx, ...args) => {
     dbReminder.channel_id = ctx.message.channel.id
     dbReminder.guild_id = ctx.guild.id
     dbReminder.message = message
-    dbReminder.remind_at = time
+    dbReminder.remind_at = new Date(time)
     await dbReminder.save()
 
-    return ctx.reply(`I will remind you to \`${message}\` on ${time.toDateString()} at ${time.toLocaleTimeString()}!`)
+    return ctx.reply(`I will remind you to \`${message}\` ${toDiscordTimestamp(Math.floor(time/1000), 'R')}!`)
 
 })
 
@@ -47,10 +48,10 @@ cmd(['remind', 'here'], async (ctx, ...args) => {
     dbReminder.channel_id = ctx.message.channel.id
     dbReminder.guild_id = ctx.guild.id
     dbReminder.message = message
-    dbReminder.remind_at = time
+    dbReminder.remind_at = new Date(time)
     await dbReminder.save()
 
-    return ctx.reply(`I will remind ${ctx.message.channel.mention} to \`${message}\` on ${time.toDateString()} at ${time.toLocaleTimeString()}!`)
+    return ctx.reply(`I will remind ${ctx.message.channel.mention} to \`${message}\` ${toDiscordTimestamp(Math.floor(time/1000), 'R')}!`)
 })
 
 cmd(['remind', 'list'], ['reminder', 'list'], async (ctx, ...args) => {
@@ -60,8 +61,8 @@ cmd(['remind', 'list'], ['reminder', 'list'], async (ctx, ...args) => {
         return ctx.reply('You have no active reminders!', 'red')
     }
     activeReminders.map((x, i) => {
-        if (i % 5 === 0) pages.push(`Reminder # | Where? | Remind At (MM/DD/YYYY) | Reminder Message\n`)
-        let timeLocale = x.remind_at.toLocaleString('en-US')
+        if (i % 5 === 0) pages.push(`Reminder # | Where? | Remind At | Reminder Message\n`)
+        let timeLocale = toDiscordTimestamp(Math.floor(x.remind_at/1000))
         pages[Math.floor(i/5)] += `**${i + 1}** | ${x.channel_reminder? `<#${x.channel_id}>`: `DM or <#${x.channel_id}>`} | **${timeLocale}** | ${x.message}\n\n`
     })
 

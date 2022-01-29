@@ -68,7 +68,7 @@ const getTimeFromReminder = async (text) => {
             amount += x
         }
     })
-    return new Date(now)
+    return now
 
 }
 
