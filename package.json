@@ -13,8 +13,9 @@
   "author": "Mj11jM",
   "license": "ISC",
   "dependencies": {
+    "ascii-table": "^0.0.9",
     "discord-paginator": "^0.8.13",
-    "eris": "github:abalabahaha/eris#dev",
+    "eris": "^0.16.1",
     "lodash": "^4.17.21",
     "mongoose": "^5.12.3",
     "pretty-ms": "^7.0.1",
