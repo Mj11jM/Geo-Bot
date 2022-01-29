@@ -283,7 +283,7 @@ bot.on('messageReactionAdd', async (message, reaction, member) => {
 })
 bot.on('messageReactionRemove', async (message, reaction, memberID) => {
     let fetchedMessage = await bot.getMessage(message.channel.id, message.id).catch(e => e)
-    if (!fetchedMessage)
+    if (!fetchedMessage || !fetchedMessage.channel.guild)
         return
     let member = fetchedMessage.channel.guild.members.get(memberID)
     await Reaction.reaction_remove(context, fetchedMessage, reaction, member)
